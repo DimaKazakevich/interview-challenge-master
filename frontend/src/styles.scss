@@ -1,0 +1,79 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 2rem;
+  color: #2f3640;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+input[type='file'] {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+button {
+  background-color: #0097e6;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #007bb8;
+  }
+
+  &:disabled {
+    background-color: #dcdde1;
+    cursor: not-allowed;
+  }
+}
+
+.error {
+  color: #e84118;
+  background: #fceae9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.result {
+  margin-top: 2rem;
+
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      background: #f1f2f6;
+      padding: 0.5rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+
+      &::before {
+        content: '→ ';
+        color: #718093;
+      }
+    }
+  }
+}

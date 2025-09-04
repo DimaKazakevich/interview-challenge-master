@@ -1,0 +1,49 @@
+.container {
+  max-width: 1500px;
+  margin: auto;
+}
+
+.error {
+  color: red;
+}
+
+.result ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.result li {
+  padding: 4px 0;
+}
+
+.process-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4rem;
+  margin-top: 2rem;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  color: #7f8fa6;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+  min-width: 60px;
+
+  .icon {
+    width: 128px;
+    height: 128px;
+    margin-bottom: 0.3rem;
+  }
+
+  .name {
+    font-weight: 500;
+  }
+}
