@@ -95,11 +95,6 @@ export class AppComponent {
     return node ? `${node.name} (${node.type})` : id.toString();
   }
 
-  getNodeById(id: string): ProcessNode | null {
-    if (!this.initialProcessGraph) return null;
-    return this.initialProcessGraph.nodes.find((n) => String(n.id) === id) || null;
-  }
-
   getNodeCssClass(node: ProcessNode): string {
     switch (node.type) {
       case 'Start':
