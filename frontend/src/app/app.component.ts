@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common'
-import { environment } from './environments/environment';
+import {Component} from '@angular/core';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {CommonModule} from '@angular/common'
+import {environment} from './environments/environment';
 
 declare const LeaderLine: any;
 
@@ -14,17 +14,17 @@ declare const LeaderLine: any;
 })
 export class AppComponent {
   selectedFile: File | null = null;
-  optimizedResult: ProcessGraph | null = null;
-  initialResult: ProcessGraph | null = null;
+  optimizedProcessGraph: ProcessGraph | null = null;
+  initialProcessGraph: ProcessGraph | null = null;
   error: string | null = null;
   warn: string | null = null;
   renderedNodeIds: Set<string> = new Set();
-  renderedNodeIds1: Set<string> = new Set();
   initialLines: any[] = [];
   optimizedLines: any[] = [];
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -36,19 +36,19 @@ export class AppComponent {
     reader.onload = () => {
       try {
         const parsed: ProcessGraph = JSON.parse(reader.result as string);
-        this.initialResult = parsed;
-        this.optimizedResult = null;
+        this.initialProcessGraph = parsed;
+        this.optimizedProcessGraph = null;
         this.renderedNodeIds.clear();
         this.clearLines('all');
 
         const gatewayIds = new Set(
-          this.initialResult.nodes
+          this.initialProcessGraph.nodes
           .filter((n) => String(n.type).toUpperCase() === 'GATEWAY')
           .map((n) => n.id)
         );
 
         gatewayIds.forEach((gatewayId) => {
-          const branchTargets = this.initialResult?.edges
+          const branchTargets = this.initialProcessGraph?.edges
           .filter((e) => e.from === gatewayId)
           .map((e) => e.to);
 
@@ -57,7 +57,7 @@ export class AppComponent {
           }
         });
 
-        setTimeout(() => this.drawLines(this.initialResult!, 'initial'), 0);
+        setTimeout(() => this.drawLines(this.initialProcessGraph!, 'initial'), 0);
       } catch {
         this.error = 'Invalid JSON in file';
       }
@@ -76,16 +76,16 @@ export class AppComponent {
     .post<ProcessGraph>(`${environment.apiUrl}/optimize/process-file`, formData)
     .subscribe({
       next: (res) => {
-        this.optimizedResult = res;
+        this.optimizedProcessGraph = res;
         this.error = null;
         if (this.optimizedLines.length === 0) {
           this.clearLines('optimized');
-          setTimeout(() => this.drawLines(this.optimizedResult!, 'optimized'), 0);
+          setTimeout(() => this.drawLines(this.optimizedProcessGraph!, 'optimized'), 0);
         }
       },
       error: (err) => {
         this.error = err?.error || 'Unexpected error';
-        this.optimizedResult = null;
+        this.optimizedProcessGraph = null;
       }
     });
   }
@@ -96,23 +96,8 @@ export class AppComponent {
   }
 
   getNodeById(id: string): ProcessNode | null {
-    if (!this.initialResult) return null;
-    return this.initialResult.nodes.find((n) => String(n.id) === id) || null;
-  }
-
-  getNodeCssClassById(id: string): string {
-    const node = this.getNodeById(id);
-    return node ? this.getNodeCssClass(node) : '';
-  }
-
-  getNodeIconUrlById(id: string): string {
-    const node = this.getNodeById(id);
-    return node ? this.getNodeIconUrl(node) : '';
-  }
-
-  getNodeNameById(id: string): string {
-    const node = this.getNodeById(id);
-    return node ? node.name : id;
+    if (!this.initialProcessGraph) return null;
+    return this.initialProcessGraph.nodes.find((n) => String(n.id) === id) || null;
   }
 
   getNodeCssClass(node: ProcessNode): string {
@@ -147,35 +132,6 @@ export class AppComponent {
       default:
         return 'assets/icons/round-not-listed-location.svg';
     }
-  }
-
-  isGatewayWithBranches(node: ProcessNode): boolean {
-    if (!this.initialResult) return false;
-    const type = String(node.type).toUpperCase();
-    if (type !== 'GATEWAY') return false;
-
-    const outgoing = this.initialResult.edges.filter((e) => e.from === node.id);
-    return outgoing.length > 1;
-  }
-
-  getBranchTargets(node: ProcessNode): string[] {
-    if (!this.initialResult) return [];
-
-    const targets = this.initialResult.edges
-    .filter((e) => e.from === node.id)
-    .map((e) => String(e.to))
-    .filter((id, index, self) => self.indexOf(id) === index);
-
-    targets.forEach((id) => this.renderedNodeIds.add(id));
-    return targets;
-  }
-
-  shouldRenderNode(node: ProcessNode): boolean {
-    return !this.renderedNodeIds.has(String(node.id));
-  }
-
-  shouldRenderNode1(node: ProcessNode): boolean {
-    return !this.renderedNodeIds1.has(String(node.id));
   }
 
   drawLines(graph: ProcessGraph, type: 'initial' | 'optimized'): void {

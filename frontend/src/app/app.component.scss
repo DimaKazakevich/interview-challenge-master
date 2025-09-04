@@ -1,5 +1,5 @@
 .container {
-  max-width: 1500px;
+  max-width: 1800px;
   margin: auto;
 }
 
@@ -24,11 +24,6 @@
   margin-top: 2rem;
 }
 
-.arrow {
-  font-size: 1.5rem;
-  color: #7f8fa6;
-}
-
 .node {
   display: flex;
   flex-direction: column;
@@ -38,8 +33,8 @@
   min-width: 60px;
 
   .icon {
-    width: 128px;
-    height: 128px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 0.3rem;
   }
 

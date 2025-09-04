@@ -12,58 +12,43 @@
     <strong>Warn:</strong> {{ warn }}
   </div>
 
-  <div class="result-wrapper" *ngIf="initialResult">
+  <div class="result-wrapper" *ngIf="initialProcessGraph">
     <div class="result">
       <h3>Initial Path</h3>
       <ul>
-        <li *ngFor="let edge of initialResult.edges">
-          {{ getNodeName(edge.from, initialResult) }} → {{ getNodeName(edge.to, initialResult) }}
+        <li *ngFor="let edge of initialProcessGraph.edges">
+          {{ getNodeName(edge.from, initialProcessGraph) }} → {{
+            getNodeName(edge.to, initialProcessGraph)
+          }}
         </li>
       </ul>
 
-      <div class="process-flow" *ngIf="initialResult">
-        <ng-container *ngFor="let node of initialResult.nodes">
-          <ng-container *ngIf="shouldRenderNode(node)">
+      <div class="process-flow" *ngIf="initialProcessGraph">
+        <ng-container *ngFor="let node of initialProcessGraph.nodes">
+          <ng-container>
             <div class="node" [ngClass]="getNodeCssClass(node)">
               <img [attr.id]="'node-' + node.id" [src]="getNodeIconUrl(node)" class="icon"/>
               <div class="name">{{ node.name }}</div>
             </div>
           </ng-container>
-
-          <ng-container *ngIf="isGatewayWithBranches(node)">
-            <div class="branches">
-              <ng-container *ngFor="let target of getBranchTargets(node)">
-                <div class="branch">
-                  <div
-                    class="node small"
-                    [attr.id]="'node-' + target + '-branch'"
-                    [ngClass]="getNodeCssClassById(target)">
-                    <img [src]="getNodeIconUrlById(target)" class="icon"/>
-                    <div class="name">{{ getNodeNameById(target) }}</div>
-                  </div>
-                </div>
-              </ng-container>
-            </div>
-          </ng-container>
-
         </ng-container>
       </div>
     </div>
 
-    <div class="result" *ngIf="initialResult && optimizedResult">
+    <div class="result" *ngIf="initialProcessGraph && optimizedProcessGraph">
       <h3>Optimized Path</h3>
       <ul>
-        <li *ngFor="let edge of optimizedResult.edges">
-          {{ getNodeName(edge.from, optimizedResult) }} → {{
-            getNodeName(edge.to, optimizedResult)
+        <li *ngFor="let edge of optimizedProcessGraph.edges">
+          {{ getNodeName(edge.from, optimizedProcessGraph) }} → {{
+            getNodeName(edge.to, optimizedProcessGraph)
           }}
         </li>
       </ul>
     </div>
 
-    <div class="process-flow" *ngIf="optimizedResult && optimizedResult">
-      <ng-container *ngFor="let node of optimizedResult.nodes; let i = index">
-        <ng-container *ngIf="shouldRenderNode1(node)">
+    <div class="process-flow" *ngIf="optimizedProcessGraph && optimizedProcessGraph">
+      <ng-container *ngFor="let node of optimizedProcessGraph.nodes; let i = index">
+        <ng-container>
           <div class="node" [ngClass]="getNodeCssClass(node)">
             <img [attr.id]="'node-optimized-' + node.id" [src]="getNodeIconUrl(node)" class="icon"/>
             <div class="name">{{ node.name }}</div>
