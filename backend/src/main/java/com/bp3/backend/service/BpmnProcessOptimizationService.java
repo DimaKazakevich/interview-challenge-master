@@ -1,6 +1,5 @@
 package com.bp3.backend.service;
 
-import com.bp3.backend.model.Edge;
 import com.bp3.backend.model.Node;
 import com.bp3.backend.model.NodeType;
 import com.bp3.backend.dto.BpmnProcessDataRequestDto;
