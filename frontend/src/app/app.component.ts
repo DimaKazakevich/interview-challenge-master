@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
-  inject,
+  inject, ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BpmnOptimizationService } from './services/bpmn-optimization.service';
@@ -30,6 +30,7 @@ export class AppComponent implements OnDestroy {
   initialProcessGraph: ProcessGraph | null = null;
   error: string | null = null;
   warn: string | null = null;
+  cdr = inject(ChangeDetectorRef);
 
   private readonly api = inject(BpmnOptimizationService);
 
@@ -44,6 +45,7 @@ export class AppComponent implements OnDestroy {
       next: (res) => {
         this.optimizedProcessGraph = res;
         this.error = null;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.error = err?.error || 'Unexpected error';
