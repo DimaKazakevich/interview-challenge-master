@@ -1,0 +1,14 @@
+<div class="process-flow" *ngIf="graph as g">
+  <div
+    class="node"
+    *ngFor="let node of g.nodes; trackBy: trackByNodeId"
+    [ngClass]="getNodeCssClass(node)"
+  >
+    <img
+      [attr.id]="'node-' + (optimized ? 'optimized-' : '') + node.id"
+      [src]="getNodeIconUrl(node)"
+      class="icon"
+    />
+    <div class="name">{{ node.name }}</div>
+  </div>
+</div>

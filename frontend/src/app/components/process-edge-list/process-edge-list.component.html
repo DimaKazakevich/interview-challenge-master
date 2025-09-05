@@ -1,0 +1,6 @@
+<h3 *ngIf="title">{{ title }}</h3>
+<ul>
+  <li *ngFor="let edge of graph.edges; trackBy: trackByIndex">
+    {{ getNodeName(edge.from, graph) }} → {{ getNodeName(edge.to, graph) }}
+  </li>
+</ul>
