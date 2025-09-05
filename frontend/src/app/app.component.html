@@ -1,60 +1,37 @@
 <div class="container p-4">
   <h2>Upload Process JSON</h2>
 
-  <input type="file" (change)="onFileSelected($event)" accept="application/json"/>
-  <button (click)="onSubmit()" [disabled]="!selectedFile">Optimize</button>
+  <app-process-upload
+    (graphParsed)="onGraphParsed($event)"
+    (fileSelected)="selectedFile = $event"
+    (parseError)="error = $event"
+  ></app-process-upload>
+  <button type="button" (click)="onSubmit()" [disabled]="!selectedFile">
+    Optimize
+  </button>
 
   <div *ngIf="error" class="error mt-3">
     <strong>Error:</strong> {{ error }}
   </div>
 
-  <div *ngIf="warn" class="error mt-3">
-    <strong>Warn:</strong> {{ warn }}
-  </div>
+  <div *ngIf="warn" class="error mt-3"><strong>Warn:</strong> {{ warn }}</div>
 
-  <div class="result-wrapper" *ngIf="initialProcessGraph">
-    <div class="result">
-      <h3>Initial Path</h3>
-      <ul>
-        <li *ngFor="let edge of initialProcessGraph.edges">
-          {{ getNodeName(edge.from, initialProcessGraph) }} → {{
-            getNodeName(edge.to, initialProcessGraph)
-          }}
-        </li>
-      </ul>
+  <div class="result-wrapper" *ngIf="initialProcessGraph as initial">
+    <app-process-edge-list
+      [graph]="initial"
+      title="Initial Path"
+    ></app-process-edge-list>
+    <app-process-flow [graph]="initial"></app-process-flow>
 
-      <div class="process-flow" *ngIf="initialProcessGraph">
-        <ng-container *ngFor="let node of initialProcessGraph.nodes">
-          <ng-container>
-            <div class="node" [ngClass]="getNodeCssClass(node)">
-              <img [attr.id]="'node-' + node.id" [src]="getNodeIconUrl(node)" class="icon"/>
-              <div class="name">{{ node.name }}</div>
-            </div>
-          </ng-container>
-        </ng-container>
-      </div>
-    </div>
-
-    <div class="result" *ngIf="initialProcessGraph && optimizedProcessGraph">
-      <h3>Optimized Path</h3>
-      <ul>
-        <li *ngFor="let edge of optimizedProcessGraph.edges">
-          {{ getNodeName(edge.from, optimizedProcessGraph) }} → {{
-            getNodeName(edge.to, optimizedProcessGraph)
-          }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="process-flow" *ngIf="optimizedProcessGraph && optimizedProcessGraph">
-      <ng-container *ngFor="let node of optimizedProcessGraph.nodes; let i = index">
-        <ng-container>
-          <div class="node" [ngClass]="getNodeCssClass(node)">
-            <img [attr.id]="'node-optimized-' + node.id" [src]="getNodeIconUrl(node)" class="icon"/>
-            <div class="name">{{ node.name }}</div>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
+    <ng-container *ngIf="optimizedProcessGraph as optimized">
+      <app-process-edge-list
+        [graph]="optimized"
+        title="Optimized Path"
+      ></app-process-edge-list>
+      <app-process-flow
+        [graph]="optimized"
+        [optimized]="true"
+      ></app-process-flow>
+    </ng-container>
   </div>
 </div>
