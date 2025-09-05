@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 public class BpmnProcessOptimizationService implements
         ProcessOptimizationService<BpmnProcessDataRequestDto, BpmnProcessDataResponseDto> {
 
+    private static final int REQUIRED_START_NODE_COUNT = 1;
+    private static final int REQUIRED_END_NODE_COUNT = 1;
+
     @Override
     public BpmnProcessDataResponseDto optimize(BpmnProcessDataRequestDto requestDto) {
         validateGraph(requestDto.nodes(), requestDto.edges());
@@ -61,7 +64,7 @@ public class BpmnProcessOptimizationService implements
         long startCount = nodes.stream().filter(n -> n.getType() == NodeType.START).count();
         long endCount = nodes.stream().filter(n -> n.getType() == NodeType.END).count();
 
-        if (startCount != 1 || endCount != 1) {
+        if (startCount != REQUIRED_START_NODE_COUNT || endCount != REQUIRED_END_NODE_COUNT) {
             throw new IllegalArgumentException("Graph must contain exactly one Start and one End node.");
         }
     }

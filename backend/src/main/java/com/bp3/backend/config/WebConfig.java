@@ -8,6 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    /**
+     * Dev only configuration for CORS.
+     * @return
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
